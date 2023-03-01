@@ -29,7 +29,7 @@ export class DelegateRpc extends RpcBase {
             xhr.timeout = DelegateRpc.timeout;
             xhr.open(
                 HttpMethodType.post,
-                [req.baseUrl, req.api].join('/'),
+                [req.baseUrl, req.api].join(''),
                 true,
             );
 
