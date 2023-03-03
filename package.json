@@ -5,10 +5,8 @@
   },
   "description": "网络请求库",
   "dependencies": {
-    "js-yaml": "^4.1.0"
   },
   "devDependencies": {
-    "@types/js-yaml": "^4.0.5",
     "@types/mocha": "^10.0.1",
     "@types/node": "^18.14.2",
     "lite-ts-mock": "^1.1.0",
@@ -34,5 +32,5 @@
     "release": "npm run build && npm publish && npm config delete https-proxy && npm config set registry=https://registry.npm.taobao.org",
     "test": "mocha -t 30s -r ./node_modules/ts-node/register/index.js --exit"
   },
-  "version": "1.2.0"
+  "version": "1.0.0"
 }

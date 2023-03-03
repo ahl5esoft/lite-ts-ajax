@@ -1,6 +1,6 @@
-# 文件操作
+# 远程过程调用
 
-![Version](https://img.shields.io/badge/version-1.2.0-green.svg)
+![Version](https://img.shields.io/badge/version-1.0.0-green.svg)
 
 ## 安装
 ```
@@ -8,14 +8,14 @@ npm install lite-ts-ajax
 ```
 
 ## 使用
-
 ```typescript
-import { FileFactory } from 'lite-ts-ajax';
+import { AjaxNetService } from 'lite-ts-ajax';
 
-const factory = new FileFactory();
-const file = await factory.buildFile('./test.txt');
-await file.readString(); // 读取文件内容
-
-const dir = await factory.buildDirectory('./test');
-await dir.create(true); // 创建文件，参数为true时递归创建
+const baseUrls=["https://xxxxx.com"];
+const rpc = new AjaxNetService(baseUrls);
+await rpc.send({
+    httpMethod: "POST || GET",
+    route: "/:app/:api",
+    body: { }
+});
 ```
