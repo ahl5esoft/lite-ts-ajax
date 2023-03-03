@@ -1,16 +1,17 @@
-import { Header } from './header';
-import { IApiDyanmicResponse } from './i-api-dynamic-response';
-import { IRpcCallOption } from './i-rpc-call-option';
+export type ApiResponse<T> = {
+    data: T;
+    err: number;
+}
 
-const routeReg = /^\/[a-z-]+/;
+
+export type RpcCallOption = {
+    route: string;
+    body?: { [key: string]: any; };
+    header?: { [key: string]: string; };
+}
 
 export abstract class RpcBase {
     public static ctor = 'RpcBase';
-    public static body: { [key: string]: any } = {};
-    public static header: { [key: string]: string } = {
-        'Content-Type': 'application/json;charset=UTF-8',
-    };
-    public static timeout: number = 15000;
 
     public static buildErrorFunc: (errorCode: number, data: any) => Error;
 
@@ -26,7 +27,7 @@ export abstract class RpcBase {
      *  // res is T, 如果resp.err!=0则会抛错
      * ```
      */
-    public async call<T>(v: IRpcCallOption) {
+    public async call<T>(v: RpcCallOption) {
         const resp = await this.callWithoutThrow<T>(v);
         if (resp.err)
             throw RpcBase.buildErrorFunc(resp.err, resp.data);
@@ -46,16 +47,5 @@ export abstract class RpcBase {
      *  // resp is IApiDyanmicResponse<T>
      * ```
      */
-    public abstract callWithoutThrow<T>(v: IRpcCallOption): Promise<IApiDyanmicResponse<T>>;
-
-    protected getRoute(route: string) {
-        return route.includes('/mh/') ? route : route.replace(routeReg, m => {
-            return m + '/mh';
-        });
-    }
-
-    protected getTimeout(header: { [key: string]: string }) {
-        return header?.[Header.timeout] ? parseInt(header[Header.timeout]) : RpcBase.timeout;
-    }
-
+    public abstract callWithoutThrow<T>(v: RpcCallOption): Promise<ApiResponse<T>>;
 }
