@@ -11,11 +11,20 @@ npm install lite-ts-ajax
 ```typescript
 import { AjaxNetService } from 'lite-ts-ajax';
 
-const baseUrls=["https://xxxxx.com"];
-const rpc = new AjaxNetService(baseUrls);
-await rpc.send({
+const baseUrl="https://xxxxx.com";
+const rpc = new RpcService(baseUrl);
+// 抛异常调用
+await rpc.call({
     httpMethod: "POST || GET",
     route: "/:app/:api",
-    body: { }
+    body: { },
+    header:{}
+});
+// 不抛异常调用
+await rpc.callWithoutThrow({
+    httpMethod: "POST || GET",
+    route: "/:app/:api",
+    body: { },
+    header:{}
 });
 ```
