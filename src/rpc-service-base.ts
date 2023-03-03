@@ -1,24 +1,24 @@
 import { ErrorCode } from './error-code';
 import { HttpReadyState } from './http-reday-state';
-import { INetRequest, INetResponse, NetServiceBase } from './net-service-base';
+import { IApiDyanmicResponse } from './i-api-dynamic-response';
+import { IRpcCallOption } from './i-rpc-call-option';
+import { RpcBase } from './rpc-base';
 
-export abstract class AjaxNetServiceBase extends NetServiceBase {
+export abstract class RpcServiceBase extends RpcBase {
     public constructor(
-        private m_Urls: string[],
+        private m_BaseUrl: string
     ) {
         super();
     }
 
-    public async send<T>(req: INetRequest): Promise<INetResponse<T>> {
-        return new Promise<INetResponse<T>>(async (s, f) => {
-
-
+    public async callWithoutThrow<T>(req: IRpcCallOption) {
+        return new Promise<IApiDyanmicResponse<T>>(async (s, f) => {
             const xhr = this.createXMLHttpRequest();
             xhr.timeout = this.getTimeout(req.header);
 
             this.onOpen(xhr, req);
 
-            this.appendHeader(xhr, NetServiceBase.header);
+            this.appendHeader(xhr, RpcServiceBase.header);
             this.appendHeader(xhr, req.header);
 
             xhr.onreadystatechange = () => {
@@ -27,9 +27,7 @@ export abstract class AjaxNetServiceBase extends NetServiceBase {
 
                 if (xhr.status === 200) {
                     try {
-                        s(
-                            JSON.parse(xhr.responseText)
-                        );
+                        s(JSON.parse(xhr.responseText));
                     } catch {
                         f({
                             data: null,
@@ -55,18 +53,13 @@ export abstract class AjaxNetServiceBase extends NetServiceBase {
         });
     }
 
-    protected getUrl(route: string) {
-        const url = this.m_Urls.length > 1 ? this.m_Urls[Date.now() % this.m_Urls.length] : this.m_Urls[0];
-        return url + this.getRoute(route);
-    }
-
     private appendHeader(xhr: XMLHttpRequest, header: { [key: string]: string }) {
         Object.keys(header ?? {}).forEach(r => {
             xhr.setRequestHeader(r, header[r]);
         });
     }
 
-    private createXMLHttpRequest = () => {
+    private createXMLHttpRequest() {
         try {
             return new XMLHttpRequest();
         } catch {
@@ -75,6 +68,9 @@ export abstract class AjaxNetServiceBase extends NetServiceBase {
         }
     };
 
-    protected abstract onOpen(xhr: XMLHttpRequest, req: INetRequest): void;
-    protected abstract onSend(xhr: XMLHttpRequest, req: INetRequest): void;
+    protected getUrl(route: string) {
+        return this.m_BaseUrl + this.getRoute(route);
+    }
+    protected abstract onOpen(xhr: XMLHttpRequest, req: IRpcCallOption): void;
+    protected abstract onSend(xhr: XMLHttpRequest, req: IRpcCallOption): void;
 }

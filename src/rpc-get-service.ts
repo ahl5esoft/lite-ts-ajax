@@ -1,19 +1,11 @@
-import { AjaxNetServiceBase } from './ajax-net-service-base';
 import { HttpMethodType } from './http-method-type';
-import { INetRequest, NetServiceBase } from './net-service-base';
+import { IRpcCallOption } from './i-rpc-call-option';
+import { RpcServiceBase } from './rpc-service-base';
 
-
-export class AjaxGetNetService extends AjaxNetServiceBase {
-
-    public constructor(
-        urls: string[]
-    ) {
-        super(urls);
-    }
-
-    public onOpen(xhr: XMLHttpRequest, req: INetRequest) {
+export class RpcGetService extends RpcServiceBase {
+    public onOpen(xhr: XMLHttpRequest, req: IRpcCallOption) {
         const bf = Object.entries({
-            ...NetServiceBase.body,
+            ...RpcGetService.body,
             ...req.body,
         }).reduce((memo, [k, v]) => {
             memo.push(k, '=', v, '&');
@@ -33,5 +25,5 @@ export class AjaxGetNetService extends AjaxNetServiceBase {
     public onSend(xhr: XMLHttpRequest) {
         xhr.send();
     }
-}
 
+}
