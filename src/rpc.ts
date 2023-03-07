@@ -115,11 +115,6 @@ export class AjaxRpc extends RpcBase {
     }
 
     private createXMLHttpRequest() {
-        try {
-            return new XMLHttpRequest();
-        } catch {
-            const ctor = require('xmlhttprequest').XMLHttpRequest;
-            return new ctor();
-        }
+        return new XMLHttpRequest();
     };
 }
