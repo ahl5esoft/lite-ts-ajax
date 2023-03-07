@@ -58,10 +58,10 @@ export class AjaxRpc extends RpcBase {
     }
 
     public async callWithoutThrow<T>(req: AjaxRpcCallOption) {
-        return new Promise<ApiResponse<T>>(async (s, f) => {
-            if (!this.m_Strategy[req.method])
-                throw new Error(`AjaxRpc不支持HttpMethod.${req.method}`);
+        if (!this.m_Strategy[req.method])
+            throw new Error(`AjaxRpc不支持HttpMethod.${req.method}`);
 
+        return new Promise<ApiResponse<T>>(async (s, f) => {
             const xhr = this.createXMLHttpRequest();
             xhr.timeout = req?.header?.[Header.timeout] ? parseInt(req.header[Header.timeout]) : AjaxRpc.timeout;
 
