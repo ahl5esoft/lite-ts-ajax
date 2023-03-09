@@ -3,7 +3,10 @@
   "bugs": {
     "url": "https://github.com/ahl5esoft/lite-ts-ajax/issues"
   },
-  "description": "网络请求库",
+  "dependencies": {
+    "lite-ts-rpc": "^1.1.0"
+  },
+  "description": "ajax远程库",
   "devDependencies": {
     "@types/mocha": "^10.0.1",
     "@types/node": "^18.14.2",
@@ -36,5 +39,5 @@
     "release": "npm run build && npm publish && npm config delete https-proxy && npm config set registry=https://registry.npm.taobao.org",
     "test": "mocha -t 30s -r ./node_modules/ts-node/register/index.js --exit"
   },
-  "version": "1.0.1"
+  "version": "1.1.1"
 }

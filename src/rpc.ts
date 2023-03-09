@@ -1,7 +1,7 @@
+import { ApiResponse, Header, HttpMethod, RpcBase } from 'lite-ts-rpc';
+
 import { GetRequestStrategy } from './get-request-strategy';
-import { HttpMethod } from './http-method';
 import { PostRequestStrategy } from './post-request-strategy';
-import { ApiResponse, RpcBase } from './rpc-base';
 import { AjaxRpcCallOption } from './rpc-call-option';
 
 enum ErrorCode {
@@ -34,18 +34,13 @@ enum HttpReadyState {
 
 const routeReg = /^\/[a-z-]+/;
 
-export enum Header {
-    authToken = 'H-A-T',
-    env = 'H-E',
-    timeout = 'H-T',
-}
-
 export class AjaxRpc extends RpcBase {
     public static body: { [key: string]: any } = {};
     public static header: { [key: string]: string } = {
         'Content-Type': 'application/json;charset=UTF-8',
     };
     public static timeout: number = 15000;
+    public static createXMLHttpRequest = () => new XMLHttpRequest();
 
     public constructor(
         private m_BaseUrl: string,
@@ -58,11 +53,13 @@ export class AjaxRpc extends RpcBase {
     }
 
     public async callWithoutThrow<T>(req: AjaxRpcCallOption) {
+        req.method ??= HttpMethod.post;
+
         if (!this.m_Strategy[req.method])
             throw new Error(`AjaxRpc不支持HttpMethod.${req.method}`);
 
         return new Promise<ApiResponse<T>>(async (s, f) => {
-            const xhr = this.createXMLHttpRequest();
+            const xhr = AjaxRpc.createXMLHttpRequest();
             xhr.timeout = req?.header?.[Header.timeout] ? parseInt(req.header[Header.timeout]) : AjaxRpc.timeout;
 
             req.route = req.route.includes('/mh/') ? req.route : req.route.replace(routeReg, m => {
@@ -113,8 +110,4 @@ export class AjaxRpc extends RpcBase {
             xhr.setRequestHeader(r, header[r]);
         });
     }
-
-    private createXMLHttpRequest() {
-        return new XMLHttpRequest();
-    };
 }

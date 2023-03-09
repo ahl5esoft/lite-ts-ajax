@@ -1,5 +1,4 @@
-import { HttpMethod } from './http-method';
-import { RpcCallOption } from './rpc-base';
+import { HttpMethod, RpcCallOption } from 'lite-ts-rpc';
 
 export type AjaxRpcCallOption = RpcCallOption & {
     method: HttpMethod;

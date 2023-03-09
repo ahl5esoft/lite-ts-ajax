@@ -1,7 +1,12 @@
 import { strictEqual } from 'assert';
+import { HttpMethod } from 'lite-ts-rpc';
 
-import { HttpMethod } from './http-method';
 import { AjaxRpc as Self } from './rpc';
+
+Self.createXMLHttpRequest = () => {
+    const ctor = require('xmlhttprequest').XMLHttpRequest;
+    return new ctor();
+};
 
 describe('src/rpc.ts', () => {
     describe('.callWithoutThrow<T>(req: AjaxRpcCallOption)', () => {
