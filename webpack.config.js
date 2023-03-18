@@ -1,14 +1,18 @@
-const pck = require("./package.json");
-const TerserPlugin = require("terser-webpack-plugin");
+const TerserPlugin = require('terser-webpack-plugin');
+
+const pkg = require('./package.json');
 
 module.exports = {
-  entry: ["./src/index.ts"],
-  mode: "none",
+  entry: ['./src/index.ts'],
+  externals: {
+    'lite-ts-rpc': 'lite-ts-rpc'
+  },
+  mode: 'none',
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        use: "ts-loader",
+        use: 'ts-loader',
         exclude: /node_modules/,
       },
     ],
@@ -19,10 +23,10 @@ module.exports = {
   },
   output: {
     path: __dirname,
-    filename: `./${pck.name}.min.js`,
-    libraryTarget: "umd",
+    filename: `./${pkg.name}.min.js`,
+    libraryTarget: 'umd',
   },
   resolve: {
-    extensions: [".ts", ".js"],
+    extensions: ['.ts', '.js'],
   },
 };

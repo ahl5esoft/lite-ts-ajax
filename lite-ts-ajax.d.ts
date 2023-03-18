@@ -1,3 +1,8 @@
+declare enum Header {
+    authToken = "H-A-T",
+    env = "H-E",
+    timeout = "H-T"
+}
 declare enum HttpMethod {
     get = "GET",
     post = "POST"
@@ -36,11 +41,6 @@ declare class PostRequestStrategy implements IRequestStrategy {
     open(xhr: XMLHttpRequest, req: AjaxRpcCallOption): void;
     send(xhr: XMLHttpRequest, req: AjaxRpcCallOption): void;
 }
-declare enum Header {
-    authToken = "H-A-T",
-    env = "H-E",
-    timeout = "H-T"
-}
 declare class AjaxRpc extends RpcBase {
     private m_BaseUrl;
     private m_Strategy;
@@ -51,11 +51,12 @@ declare class AjaxRpc extends RpcBase {
         [key: string]: string;
     };
     static timeout: number;
+    static createXMLHttpRequest: () => XMLHttpRequest;
     constructor(m_BaseUrl: string, m_Strategy?: {
         GET: GetRequestStrategy;
         POST: PostRequestStrategy;
     });
     callWithoutThrow<T>(req: AjaxRpcCallOption): Promise<ApiResponse<T>>;
     private appendHeader;
-    private createXMLHttpRequest;
 }
+{ AjaxRpc, AjaxRpcCallOption };
