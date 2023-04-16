@@ -1,13 +1,9 @@
+import { ErrorCode } from 'lite-ts-error';
 import { ApiResponse, Header, HttpMethod, RpcBase } from 'lite-ts-rpc';
 
 import { GetRequestStrategy } from './get-request-strategy';
 import { PostRequestStrategy } from './post-request-strategy';
 import { AjaxRpcCallOption } from './rpc-call-option';
-
-enum ErrorCode {
-    timeout = 504,
-    panic = 599,
-}
 
 enum HttpReadyState {
     /**
