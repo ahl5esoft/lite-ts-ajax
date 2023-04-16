@@ -1,5 +1,5 @@
 import { ErrorCode } from 'lite-ts-error';
-import { ApiResponse, Header, HttpMethod, RpcBase } from 'lite-ts-rpc';
+import { HttpMethod, RpcBase, RpcHeader, RpcResponse } from 'lite-ts-rpc';
 
 import { GetRequestStrategy } from './get-request-strategy';
 import { PostRequestStrategy } from './post-request-strategy';
@@ -48,15 +48,15 @@ export class AjaxRpc extends RpcBase {
         super();
     }
 
-    public async callWithoutThrow<T>(req: AjaxRpcCallOption) {
+    protected async onCall<T>(req: AjaxRpcCallOption) {
         req.method ??= HttpMethod.post;
 
         if (!this.m_Strategy[req.method])
             throw new Error(`AjaxRpc不支持HttpMethod.${req.method}`);
 
-        return new Promise<ApiResponse<T>>(async (s, f) => {
+        return new Promise<RpcResponse<T>>(async (s, f) => {
             const xhr = AjaxRpc.createXMLHttpRequest();
-            xhr.timeout = req?.header?.[Header.timeout] ? parseInt(req.header[Header.timeout]) : AjaxRpc.timeout;
+            xhr.timeout = req?.header?.[RpcHeader.timeout] ? parseInt(req.header[RpcHeader.timeout]) : AjaxRpc.timeout;
 
             req.route = req.route.includes('/mh/') ? req.route : req.route.replace(routeReg, m => {
                 return m + '/mh';
