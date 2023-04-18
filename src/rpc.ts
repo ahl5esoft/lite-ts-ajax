@@ -30,11 +30,9 @@ enum HttpReadyState {
 
 const routeReg = /^\/[a-z-]+/;
 
+RpcBase.header['Content-Type'] = 'application/json;charset=UTF-8';
+
 export class AjaxRpc extends RpcBase {
-    public static body: { [key: string]: any } = {};
-    public static header: { [key: string]: string } = {
-        'Content-Type': 'application/json;charset=UTF-8',
-    };
     public static timeout: number = 15000;
     public static createXMLHttpRequest = () => new XMLHttpRequest();
 
